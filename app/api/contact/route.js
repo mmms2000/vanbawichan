@@ -12,6 +12,10 @@ export async function POST(request) {
       return Response.json({ error: "이름, 메일, 문의 내용을 모두 입력해주세요." }, { status: 400 });
     }
 
+    if (message.length > 300) {
+      return Response.json({ error: "문의 내용은 300자까지만 입력할 수 있습니다." }, { status: 400 });
+    }
+
     if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
       return Response.json(
         { error: "메일 서버 환경변수가 아직 설정되지 않았습니다." },

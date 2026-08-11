@@ -596,9 +596,18 @@ dd {
 }
 
 .contact-form label span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   color: rgba(239, 251, 255, 0.68);
   font-size: 0.78rem;
   font-weight: 900;
+}
+
+.contact-form label b {
+  color: rgba(239, 251, 255, 0.42);
+  font-size: 0.72rem;
 }
 
 .contact-form input,
@@ -615,7 +624,8 @@ dd {
 }
 
 .contact-form textarea {
-  resize: vertical;
+  overflow: hidden;
+  resize: none;
   min-height: 128px;
 }
 
@@ -627,6 +637,17 @@ dd {
 .contact-form input:focus,
 .contact-form textarea:focus {
   border-color: #ffffff;
+}
+
+.contact-form input.is-invalid,
+.contact-form textarea.is-invalid {
+  border-color: #ff4d4d;
+  box-shadow: 0 10px 30px rgba(255, 77, 77, 0.12);
+}
+
+.contact-form input.is-invalid::placeholder,
+.contact-form textarea.is-invalid::placeholder {
+  color: rgba(255, 122, 122, 0.62);
 }
 
 .contact-form button {

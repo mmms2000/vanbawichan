@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const experiences = [
   {
@@ -37,14 +37,18 @@ const skills = [
   ["Communication", "클라이언트의 니즈를 명확히 파악하고 제작 방향을 정돈합니다."],
 ];
 
+const maxMessageLength = 300;
+
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [progress, setProgress] = useState(0);
+  const messageRef = useRef(null);
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [contactAttempted, setContactAttempted] = useState(false);
   const [contactStatus, setContactStatus] = useState({
     state: "idle",
     message: "",
@@ -85,13 +89,31 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!messageRef.current) return;
+    messageRef.current.style.height = "auto";
+    messageRef.current.style.height = `${messageRef.current.scrollHeight}px`;
+  }, [contactForm.message]);
+
   const updateContactField = (event) => {
     const { name, value } = event.target;
-    setContactForm((current) => ({ ...current, [name]: value }));
+    const nextValue = name === "message" ? value.slice(0, maxMessageLength) : value;
+    setContactForm((current) => ({ ...current, [name]: nextValue }));
+    if (contactStatus.state !== "idle") {
+      setContactStatus({ state: "idle", message: "" });
+    }
   };
 
   const sendContactMail = async (event) => {
     event.preventDefault();
+    setContactAttempted(true);
+
+    const hasEmptyField = Object.values(contactForm).some((value) => !value.trim());
+    if (hasEmptyField) {
+      setContactStatus({ state: "error", message: "빈칸을 모두 입력해주세요." });
+      return;
+    }
+
     setContactStatus({ state: "sending", message: "문의 메일을 보내는 중입니다." });
 
     try {
@@ -107,6 +129,7 @@ export default function Home() {
       }
 
       setContactForm({ name: "", email: "", message: "" });
+      setContactAttempted(false);
       setContactStatus({ state: "sent", message: "문의가 메일로 전송되었습니다." });
     } catch (error) {
       setContactStatus({
@@ -291,38 +314,43 @@ export default function Home() {
               </a>
             </div>
 
-            <form className="contact-form" onSubmit={sendContactMail}>
+            <form className="contact-form" onSubmit={sendContactMail} noValidate>
               <label>
                 <span>이름</span>
                 <input
+                  className={contactAttempted && !contactForm.name.trim() ? "is-invalid" : ""}
                   name="name"
                   value={contactForm.name}
                   onChange={updateContactField}
                   placeholder="Name"
                   type="text"
-                  required
+                  aria-invalid={contactAttempted && !contactForm.name.trim()}
                 />
               </label>
               <label>
                 <span>메일</span>
                 <input
+                  className={contactAttempted && !contactForm.email.trim() ? "is-invalid" : ""}
                   name="email"
                   value={contactForm.email}
                   onChange={updateContactField}
                   placeholder="Email"
                   type="email"
-                  required
+                  aria-invalid={contactAttempted && !contactForm.email.trim()}
                 />
               </label>
               <label>
-                <span>문의 내용</span>
+                <span>문의 내용 <b>{contactForm.message.length}/{maxMessageLength}</b></span>
                 <textarea
+                  ref={messageRef}
+                  className={contactAttempted && !contactForm.message.trim() ? "is-invalid" : ""}
                   name="message"
                   value={contactForm.message}
                   onChange={updateContactField}
                   placeholder="Message"
                   rows="5"
-                  required
+                  maxLength={maxMessageLength}
+                  aria-invalid={contactAttempted && !contactForm.message.trim()}
                 />
               </label>
               <button type="submit" disabled={contactStatus.state === "sending"}>
