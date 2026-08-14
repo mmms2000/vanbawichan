@@ -1,75 +1,64 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const experiences = [
-  {
-    year: "2020",
-    title: "콘텐츠 부문 대상",
-    body: "공모전과 기관 프로젝트를 통해 기획력과 제작 완성도를 증명했습니다.",
-  },
-  {
-    year: "2021 - 2022",
-    title: "영상 총괄 디렉팅",
-    body: "촬영, 편집, 색 보정, 사운드까지 콘텐츠 제작 흐름을 주도했습니다.",
-  },
-  {
-    year: "2023 - 현재",
-    title: "전속 크리에이터",
-    body: "브랜드의 메인 콘텐츠를 기획하고 제작하며 꾸준한 협업 결과를 만들고 있습니다.",
-  },
+  ["2026", "제6회 대상그룹 대학생 스마트폰 영화제", "최종 선정"],
+  ["2026", "한국철도공사(KORAIL) 제2회 「철도를 담다」", "공모전 수상"],
+  ["2025", "대한민국-키르기스스탄 교육협력 컨퍼런스", "공식 행사 사진 촬영"],
+  ["2024.12 - 2025.02", "KNN 뉴미디어국 인턴", "뉴미디어 제작 실무"],
+  ["2024, 2026", "부산 영화의전당 사진 공모전", "총 2회 수상"],
+  ["2022 - 현재", "부산 수영로교회 미얀마 예배부", "미디어 총괄"],
+  ["2025", "부산대학교 글로벌 엠버서더", "미디어 담당"],
+];
+
+const experiencePhotos = [
+  ["experience-01.png", "Filming city view at dusk"],
+  ["experience-02.png", "Operating a broadcast camera"],
+  ["experience-03.png", "Editing media at a workstation"],
+  ["experience-04.png", "Directing a camera crew"],
 ];
 
 const works = [
-  { image: "/work-crops/work-01.png", meta: "26 MM | 20.0 SEC | F13 | ISO 100" },
-  { image: "/work-crops/work-02.png", meta: "31 MM | 1/90 SEC | F11 | ISO 250" },
-  { image: "/work-crops/work-03.png", meta: "18 MM | 1/500 SEC | F5 | ISO 200" },
-  { image: "/work-crops/work-04.png", meta: "18 MM | 1/90 SEC | F4 | ISO 250" },
-  { image: "/work-crops/work-05.png", meta: "25 MM | 1/8 SEC | F4 | ISO 100" },
-  { image: "/work-crops/work-06.png", meta: "18 MM | 20.0 SEC | F22 | ISO 125" },
+  ["work-01.png", "26 MM | 20.0 SEC | F13 | ISO 100"],
+  ["work-02.png", "31 MM | 1/90 SEC | F11 | ISO 250"],
+  ["work-03.png", "18 MM | 1/500 SEC | F5 | ISO 200"],
+  ["work-04.png", "18 MM | 1/90 SEC | F4 | ISO 250"],
+  ["work-05.png", "25 MM | 1/8 SEC | F4 | ISO 100"],
+  ["work-06.png", "18 MM | 20.0 SEC | F22 | ISO 125"],
+  ["work-07.png", "76 MM | 1/3 SEC | F6.7 | ISO 125"],
+  ["work-08.png", "63 MM | 1/125 SEC | F4 | ISO 6400"],
+  ["work-09.png", "18 MM | 1/125 SEC | F4 | ISO 125"],
+  ["work-10.png", "26 MM | 20.0 SEC | F16 | ISO 125"],
 ];
 
-const skills = [
-  ["Planning", "시장 조사와 타겟 분석을 바탕으로 맞춤형 콘텐츠를 설계합니다."],
-  ["Production", "촬영 장비와 제작 툴을 활용해 높은 밀도의 결과물을 만듭니다."],
-  ["Analysis", "Studio와 GA4 기반으로 지속 시간, 유입 경로, 반응을 읽습니다."],
-  ["Communication", "클라이언트의 니즈를 명확히 파악하고 제작 방향을 정돈합니다."],
+const videos = [
+  ["PROMOTION VIDEO", "https://www.youtube.com/watch?v=HToEahDBfpY"],
+  ["SHORT FILM", "https://www.youtube.com/watch?v=vo3lPwPvxyU"],
+  ["COMPETITION", "https://www.youtube.com/watch?v=bQ6na5dehnQ"],
+  ["MV", "https://www.youtube.com/watch?v=DDCfZFqSwMQ"],
 ];
 
 const maxMessageLength = 300;
 
 export default function Home() {
-  const [scrollY, setScrollY] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [showHeroArrow, setShowHeroArrow] = useState(true);
   const messageRef = useRef(null);
-  const [contactForm, setContactForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
   const [contactAttempted, setContactAttempted] = useState(false);
-  const [contactStatus, setContactStatus] = useState({
-    state: "idle",
-    message: "",
-  });
-
-  const brands = useMemo(
-    () => ["Brand 1", "Brand 2", "Brand 3", "Brand 4", "Brand 5", "Brand 6"],
-    []
-  );
+  const [contactStatus, setContactStatus] = useState({ state: "idle", message: "" });
 
   useEffect(() => {
     const revealItems = document.querySelectorAll("[data-reveal]");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
+          entry.target.classList.toggle("is-visible", entry.isIntersecting);
         });
       },
-      { threshold: 0.16 }
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.04 }
     );
 
     revealItems.forEach((item) => observer.observe(item));
@@ -80,8 +69,8 @@ export default function Home() {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const nextY = window.scrollY;
-      setScrollY(nextY);
       setProgress(max > 0 ? Math.min(100, (nextY / max) * 100) : 0);
+      setShowHeroArrow(nextY < 20);
     };
 
     onScroll();
@@ -99,17 +88,14 @@ export default function Home() {
     const { name, value } = event.target;
     const nextValue = name === "message" ? value.slice(0, maxMessageLength) : value;
     setContactForm((current) => ({ ...current, [name]: nextValue }));
-    if (contactStatus.state !== "idle") {
-      setContactStatus({ state: "idle", message: "" });
-    }
+    if (contactStatus.state !== "idle") setContactStatus({ state: "idle", message: "" });
   };
 
   const sendContactMail = async (event) => {
     event.preventDefault();
     setContactAttempted(true);
 
-    const hasEmptyField = Object.values(contactForm).some((value) => !value.trim());
-    if (hasEmptyField) {
+    if (Object.values(contactForm).some((value) => !value.trim())) {
       setContactStatus({ state: "error", message: "빈칸을 모두 입력해주세요." });
       return;
     }
@@ -123,19 +109,13 @@ export default function Home() {
         body: JSON.stringify(contactForm),
       });
       const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "메일 전송에 실패했습니다.");
-      }
+      if (!response.ok) throw new Error(result.error || "메일 전송에 실패했습니다.");
 
       setContactForm({ name: "", email: "", message: "" });
       setContactAttempted(false);
       setContactStatus({ state: "sent", message: "문의가 메일로 전송되었습니다." });
     } catch (error) {
-      setContactStatus({
-        state: "error",
-        message: error.message || "메일 전송에 실패했습니다.",
-      });
+      setContactStatus({ state: "error", message: error.message || "메일 전송에 실패했습니다." });
     }
   };
 
@@ -148,150 +128,153 @@ export default function Home() {
         <div>
           <a href="#about">About</a>
           <a href="#work">Work</a>
-          <a href="#skills">Skills</a>
+          <a href="#video">Video</a>
           <a href="#contact">Contact</a>
         </div>
       </nav>
 
-      <section id="top" className="hero">
-        <div
-          className="hero-media"
-          style={{ transform: `translate3d(0, ${scrollY * 0.08}px, 0)` }}
-          aria-hidden="true"
+      <section id="top" className="reference-hero">
+        <div className="hero-title" data-reveal>
+          <p><span>VAN</span><span>BAWI</span><span>CHAN</span></p>
+          <h1>Creator Portfolio, 반보이찬</h1>
+        </div>
+        <Image
+          src="/portfolio-assets/cover-camera.png"
+          alt="Van Bawi Chan filming with a camera"
+          width={903}
+          height={866}
+          className="cover-photo"
+          priority
+        />
+        <a
+          href="#about"
+          className={`circle-link hero-arrow ${showHeroArrow ? "is-visible" : "is-hidden"}`}
+          aria-label="Scroll to about"
+          onClick={() => setShowHeroArrow(false)}
         >
-          <Image
-            src="/pdf-pages/slide-04.png"
-            alt=""
-            width={1920}
-            height={1080}
-            className="hero-slide main"
-            priority
-          />
-          <Image
-            src="/pdf-pages/slide-05.png"
-            alt=""
-            width={1920}
-            height={1080}
-            className="hero-slide ghost"
-          />
-        </div>
-        <div className="hero-copy">
-          <p className="kicker" data-reveal>Creator Portfolio</p>
-          <h1 data-reveal><span>VAN</span><span>BAWI</span><span>CHAN</span></h1>
-          <div className="hero-bottom" data-reveal>
-            <p>기획, 촬영, 편집, 분석까지 연결하는 모던 크리에이터 포트폴리오.</p>
-            <a href="#work" className="circle-link" aria-label="View portfolio work">↓</a>
-          </div>
-        </div>
+          ↓
+        </a>
       </section>
 
-      <section id="about" className="section about-section">
-        <div className="section-label" data-reveal>About</div>
-        <div className="about-grid">
-          <div data-reveal>
-            <h2>브랜드의 흐름을 읽고, 영상의 리듬으로 설계합니다.</h2>
-          </div>
-          <div className="about-copy" data-reveal>
-            <p>
-              Van Bawi Chan은 콘텐츠의 첫 아이디어부터 완성된 화면까지 직접 다루는
-              크리에이터입니다. 흑백의 단단한 톤 위에 촬영 정보와 제작 의도를 선명하게
-              남기며, 브랜드가 필요로 하는 메시지를 시각적인 경험으로 변환합니다.
-            </p>
-            <dl>
-              <div><dt>Email</dt><dd>VANBAWICHAN2003@GMAIL.COM</dd></div>
-              <div><dt>Instagram</dt><dd>@VANBAWICHAN</dd></div>
-            </dl>
-          </div>
-        </div>
-      </section>
-
-      <section className="section experience-section">
-        <div className="section-label" data-reveal>Experience</div>
-        <div className="timeline">
-          {experiences.map((item, index) => (
-            <article className="timeline-item" data-reveal key={item.year} style={{ "--delay": `${index * 90}ms` }}>
-              <span>{item.year}</span>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="work" className="work-section">
-        <div className="sticky-heading">
-          <p className="kicker" data-reveal>Selected Work</p>
-          <h2 data-reveal>프레임마다 남긴 속도, 빛, 의도.</h2>
-        </div>
-        <div className="work-track">
-          {works.map((work, index) => (
-            <article className="work-card" data-reveal key={work.image} style={{ "--delay": `${index * 70}ms` }}>
-              <div className="work-frame">
-                <Image
-                  src={work.image}
-                  alt={`Portfolio work ${index + 1}`}
-                  width={1547}
-                  height={871}
-                  sizes="(max-width: 768px) 96vw, 92vw"
-                />
-              </div>
-              <div className="work-caption">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>A6400 | SELP18105G | {work.meta}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section personal-section">
-        <div className="section-label" data-reveal>Personal Work</div>
-        <div className="personal-panel" data-reveal>
-          <span>Documentary</span>
-          <h2>일상의 재발견</h2>
+      <section id="about" className="reference-section about-reference">
+        <div className="reference-copy" data-reveal>
+          <p className="section-kicker">ABOUT ME</p>
+          <h2>VAN BAWI CHAN</h2>
+          <strong>2003.07.21, 미얀마</strong>
           <p>
-            상업적인 틀에서 벗어나 크리에이터 고유의 미학적 실험을 진행한 자체 기획
-            다큐멘터리. 독창적인 색 보정과 사운드 디자인을 중심에 둡니다.
+            안녕하세요. 사진작가이자 영상 디렉터 반보이찬입니다.<br />
+            미얀마에서 태어나 한국에서 15년 동안 살아오며,<br />
+            제2의 고향인 한국에서의 순간들을 사진과 영상으로 기록해 왔습니다.
           </p>
+          <p>
+            저에게 순간은 눈으로 바라보는 것만으로는 아쉽고,<br />
+            다시 꺼내볼 수 있도록 담아내야 할 소중한 이야기입니다.<br />
+            저는 평범한 순간도 저만의 시선과 감각으로 담아내어,<br />
+            시간이 지나도 기억에 남는 하나의 작품이자 걸작으로 만들어가는 예술가입니다.
+          </p>
+          <dl>
+            <div><dt>Email</dt><dd>VANBAWICHAN2003@GMAIL.COM</dd></div>
+            <div><dt>Instagram</dt><dd>@VANBAWICHAN</dd></div>
+          </dl>
+        </div>
+        <Image
+          src="/portfolio-assets/about-portrait.png"
+          alt="Portrait of Van Bawi Chan"
+          width={684}
+          height={577}
+          className="about-photo"
+          data-reveal
+        />
+      </section>
+
+      <section className="experience-reference">
+        <div className="section-kicker experience-title" data-reveal>EXPERIENCE</div>
+        <div className="experience-copy">
+          <div className="experience-list">
+            {experiences.map(([year, title, body], index) => (
+              <article data-reveal key={`${year}-${title}`} style={{ "--delay": `${index * 60}ms` }}>
+                <span>{year}</span>
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div className="experience-photo-grid" data-reveal>
+          {experiencePhotos.map(([image, alt]) => (
+            <Image
+              src={`/portfolio-assets/${image}`}
+              alt={alt}
+              width={668}
+              height={476}
+              key={image}
+              sizes="(max-width: 920px) 94vw, 34vw"
+            />
+          ))}
         </div>
       </section>
 
-      <section className="section collaboration-section">
-        <div className="section-label" data-reveal>Collaboration</div>
-        <div className="brand-grid">
-          {brands.map((brand, index) => (
-            <div className="brand-cell" data-reveal key={brand} style={{ "--delay": `${index * 70}ms` }}>
-              <span>{brand}</span>
-              <p>협업 브랜드</p>
+      <section id="work" className="scroll-work">
+        <div className="sticky-work-title">
+          <p className="section-kicker">PHOTO WORKS</p>
+          <h2>사진의 흐름을 자연스럽게 따라가는 포트폴리오.</h2>
+        </div>
+        {works.map(([image, meta], index) => (
+          <article className="work-reveal" data-reveal key={image}>
+            <Image
+              src={`/work-crops/${image}`}
+              alt={`Photography work ${index + 1}`}
+              width={1547}
+              height={871}
+              sizes="(max-width: 768px) 96vw, 86vw"
+            />
+            <div>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <p>A6400 | SELP18105G | {meta}</p>
             </div>
+          </article>
+        ))}
+      </section>
+
+      <section id="video" className="video-reference">
+        <div data-reveal>
+          <p className="section-kicker">VISUAL NARRATIVES</p>
+          <h2 className="video-title">영상으로 확장되는 시선.</h2>
+        </div>
+        <div className="video-links">
+          {videos.map(([title, url], index) => (
+            <a href={url} target="_blank" rel="noreferrer" data-reveal key={title} style={{ "--delay": `${index * 70}ms` }}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{title}</strong>
+              <small>YOUTUBE</small>
+            </a>
           ))}
         </div>
       </section>
 
-      <section id="skills" className="section skills-section">
-        <div className="section-label" data-reveal>Core Skills</div>
-        <div className="skills-grid">
-          {skills.map(([title, body], index) => (
-            <article className="skill-card" data-reveal key={title} style={{ "--delay": `${index * 80}ms` }}>
-              <span>0{index + 1}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </article>
-          ))}
+      <section className="sns-reference">
+        <div data-reveal>
+          <p className="section-kicker">SNS</p>
+          <a href="https://www.instagram.com/vanbawichan/?hl=en" target="_blank" rel="noreferrer">@VANBAWICHAN</a>
         </div>
+        <Image
+          src="/portfolio-assets/sns-preview.png"
+          alt="Instagram profile preview"
+          width={573}
+          height={594}
+          data-reveal
+        />
       </section>
 
       <section id="contact" className="contact-section">
+        <div className="contact-heading" data-reveal>
+          <p className="kicker">THANK YOU</p>
+          <h2 className="contact-title"><span>새로운 시선을 넘어,</span><span>브랜드의 마스터 피스를 만들 준비가 되어 있습니다.</span></h2>
+        </div>
         <div className="contact-inner" data-reveal>
-          <p className="kicker">Thank You</p>
-          <h2>귀사의 브랜드에 새로운 흐름을 만들 준비가 되어 있습니다.</h2>
           <div className="contact-grid">
             <div className="contact-links" aria-label="Contact links">
-              <a
-                href="mailto:VANBAWICHAN2003@GMAIL.COM"
-                className="icon-link"
-                aria-label="Send email to Van Bawi Chan"
-              >
+              <a href="mailto:VANBAWICHAN2003@GMAIL.COM" className="icon-link" aria-label="Send email to Van Bawi Chan">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M4 6.5h16v11H4z" />
                   <path d="m4 7 8 6 8-6" />
@@ -311,6 +294,19 @@ export default function Home() {
                   <circle cx="16.8" cy="7.2" r="0.8" />
                 </svg>
                 <span>Instagram</span>
+              </a>
+              <a
+                href="https://www.youtube.com/@VanBawiChan"
+                className="icon-link"
+                aria-label="Open Van Bawi Chan YouTube"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4.5 8.2c.2-1.1 1.1-1.9 2.2-2.1 1.8-.3 5.3-.3 5.3-.3s3.5 0 5.3.3c1.1.2 2 .9 2.2 2.1.3 1.8.3 3.8.3 3.8s0 2-.3 3.8c-.2 1.1-1.1 1.9-2.2 2.1-1.8.3-5.3.3-5.3.3s-3.5 0-5.3-.3c-1.1-.2-2-.9-2.2-2.1-.3-1.8-.3-3.8-.3-3.8s0-2 .3-3.8Z" />
+                  <path d="m10.5 9.4 4.2 2.6-4.2 2.6Z" />
+                </svg>
+                <span>YouTube</span>
               </a>
             </div>
 
@@ -356,12 +352,18 @@ export default function Home() {
               <button type="submit" disabled={contactStatus.state === "sending"}>
                 {contactStatus.state === "sending" ? "보내는 중" : "문의하기"}
               </button>
-              {contactStatus.message ? (
-                <p className={`contact-status ${contactStatus.state}`}>{contactStatus.message}</p>
-              ) : null}
+              {contactStatus.message ? <p className={`contact-status ${contactStatus.state}`}>{contactStatus.message}</p> : null}
             </form>
           </div>
         </div>
+        <Image
+          src="/portfolio-assets/thank-you-camera.png"
+          alt="Van Bawi Chan taking a photo"
+          width={919}
+          height={992}
+          className="contact-photo"
+          data-reveal
+        />
       </section>
     </main>
   );
