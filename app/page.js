@@ -34,7 +34,7 @@ const works = [
 ];
 
 const videos = [
-  ["PROMOTION VIDEO", "https://www.youtube.com/watch?v=HToEahDBfpY"],
+  ["PROMOTION VIDEO", "https://www.youtube.com/watch?v=sGgFbcInyuY"],
   ["SHORT FILM", "https://www.youtube.com/watch?v=vo3lPwPvxyU"],
   ["COMPETITION", "https://www.youtube.com/watch?v=bQ6na5dehnQ"],
   ["MV", "https://www.youtube.com/watch?v=DDCfZFqSwMQ"],
